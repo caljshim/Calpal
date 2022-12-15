@@ -1,0 +1,14 @@
+.labelCaleb {
+    border: solid 0px #4bb6fd;
+    transition: border 100ms linear;
+}
+.labelCaleb:hover { border: solid 5px #4bb6fd}
+#caleb {
+    border: solid 0px
+}
+#caleb.pointer {
+    cursor: grab;
+}
+#caleb.hover {
+    cursor: grab;
+}

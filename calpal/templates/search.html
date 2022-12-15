@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+    <div class="columns is-mobile is-centered">
+        <div style="min-width:800px" class="column is-half">
+            <div class="field">
+                <p class="title is-2">Search</p>
+                <form>
+                    <div class="control">
+                        <div class="columns">
+                            <div class="column"><input type="text" name="q" class="input" placeholder="Search users" value="{{ request.GET.q }}"></div>
+                            <div class="column is-right is-one-quarter"><button type="submit" class="button is-success">Search</button></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br>
+            {% for user in users %}
+            <a href="{% url 'profile' user.username %}">
+            <div class="labelCaleb">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="media">
+                        <div class="media-left">
+                            <figure style="height:64px;width:64px;overflow:hidden;border-radius: 50%;">
+                                {% if user.profile.picture %}
+                                <img style="height:100%;width:100%" src="{{ user.profile.picture.url }}" alt="Placeholder image">
+                                {% else %}
+                                <img style="height:100%;width:100%" src="{% static 'img/defaultpfp.png' %}">
+                                {% endif %}
+                              </figure>
+                        </div>
+                        <div style="align-self: center;" class="media-content">
+                            <p id="caleb" class="title is-3">@{{ user.username }}</p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </a>
+            <br>
+            {% endfor %}
+    </div>
+</body>
+</html>
+{% endblock %}

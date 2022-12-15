@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="columns is-mobile is-centered">
+    <div style="min-width:800px" class="column is-half">
+  {% if notifications %}
+    {% for notification in notifications %}
+    {% if notification.notification_type == 1 %}
+        <div class="notification">
+          <a class="delete" href="{% url 'delete-notification' notification.id %}"></a>
+            <article class="media">
+
+              <figure class="media-left">
+                <figure style="height:48px;width:48px;overflow:hidden;border-radius: 50%;">
+                  {% if notification.sender.profile.picture %}
+                  <img style="height:100%;width:100%" src="{{ notification.sender.profile.picture.url }}" alt="Placeholder image">
+                  {% else %}
+                  <img style="height:100%;width:100%" src="{% static 'img/defaultpfp.png' %}">
+                  {% endif %}
+                </figure>
+              </figure>
+
+              <div class="media-content">
+                <div class="content">
+                  <p style="margin-bottom:10px">
+                    <strong>@{{ notification.sender.username }}</strong>
+                    <br>
+                    Commented: 
+                    <br>
+                    {{ notification.text_preview }}
+                  </p>
+                    <div class="content">
+                      <strong><small>{{ notification.date|naturaltime }}</small></strong>
+                    </div>
+                </div>
+              </div>
+
+              <div class="media-right">
+                <figure style="height:128px;width:128px;overflow:hidden">
+                  <img src="{{ notification.post.picture.url }}">
+                </figure>
+              </div>
+            </article>
+        </div>
+    {% endif %}
+
+    {% if notification.notification_type == 2 %}
+        <div class="notification">
+          <a class="delete" href="{% url 'delete-notification' notification.id %}"></a>
+            <article class="media">
+                <figure class="media-left">
+                    <figure style="height:48px;width:48px;overflow:hidden;border-radius: 50%;">
+                        {% if notification.sender.profile.picture %}
+                        <img style="height:100%;width:100%" src="{{ notification.sender.profile.picture.url }}" alt="Placeholder image">
+                        {% else %}
+                        <img style="height:100%;width:100%" src="{% static 'img/defaultpfp.png' %}">
+                        {% endif %}
+                      </figure>
+                </figure>
+
+                <div class="media-content">
+                <div class="content">
+                    <strong>@{{ notification.sender.username }}</strong>
+                    <p style="margin-bottom: 1px;">Started following you</p>
+                    <strong><small>{{ notification.date|naturaltime }}</small></strong>
+                </div>
+                </div>
+            </article>
+        </div>
+    {% endif %}
+    {% endfor %}
+
+  {% else %}
+    <div style="position: fixed;top:50%;left:50%;transform: translate(-50%, -50%);min-width: 350px">
+      <section class="section">
+      <p style="color:gray;resize:both;" class="subtitle is-2">No notifications</p>
+      </section>
+    </div>
+  {% endif %}
+    </div>
+</div>
+
+{% endblock %}

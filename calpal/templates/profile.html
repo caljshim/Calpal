@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<section>
+  <article class="media">
+      <div class="media-left">
+        <div style="height:256px;width:256px;border-radius:50%;overflow:hidden">
+          {% if profile.picture %}
+            <img style="height:100%;width:100%" src="{{ profile.picture.url }}">
+          {% else %}
+            <img style="height:100%;width:100%" src="{% static 'img/defaultpfp.png' %}">
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="media-content">
+          <div class="content">
+            {% if profile.first_name %}
+              <h1 class="title is-1">{{ profile.first_name }} {{ profile.last_name }}</h1>
+              <h3 class="subtitle is-3">@{{ profile.user }}</h3>
+            {% elif profile.first_name == '' and profile.last_name %}
+              <h1 class="title is-1">{{ profile.last_name }}</h1>
+              <h3 class="subtitle is-3">@{{ profile.user }}</h3>
+            {% else %}
+              <h1 class="title is-1">@{{ profile.user }}</h1>
+            {% endif %}
+            {% if user.is_authenticated and user != profile.user %}
+              {% if follow_status == True %}
+                <a href="{% url 'follow' profile.user 0 %}"><button class="button is-danger">Unfollow</button></a>
+              {% else %}
+                <a href="{% url 'follow' profile.user 1 %}"><button class="button is-success">Follow</button></a>
+              {% endif %}
+            {% endif %}
+          </div>
+  <nav class="level is-mobile">
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">Posts</p>
+          <p class="title">{{ posts_count }}</p>
+        </div>
+      </div>
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">Following</p>
+          <p class="title">{{ following_count }}</p>
+        </div>
+      </div>
+      <div class="level-item has-text-centered">
+        <div>
+          <p class="heading">Followers</p>
+          <p class="title">{{ followers_count }}</p>
+        </div>
+      </div>
+    </nav>
+
+    <p class="subtitle is-5">
+      {% if profile.profile_info %} 
+        <p class="subtitle is-5">{{ profile.profile_info }}</p>
+      {% endif %}
+    {% if user.is_authenticated and user == profile.user %}
+      <a href="{% url 'edit-profile' %}"><button class="button">Edit profile</button></a>
+    {% endif %}
+  </div>
+    </article>
+
+  </div>
+  </div>
+</div>
+</section>
+
+  <section class="section">
+    <div class="container">
+        <div class="tabs is-centered">
+            <ul>
+                <li class="is-active"><a><i class="material-icons">dashboard</i>Posts</a>
+                </li>
+            </ul>
+            </div>
+        <div class="columns is-mobile is-multiline is-centered">
+    {% if posts %}
+      {% for post in posts %}
+        <div class="column is-one-quarter">
+          <div class="box">
+                <figure class="image is-254x254">
+                  <a href="{{ post.get_absolute_url }}"><img src="{{ post.picture.url }}" alt="Image"></a>
+                </figure>
+            </div>
+          </div>
+      {% endfor %}
+    {% else %}
+      <div class="columns is-centered">
+        <section class="section">
+         <p style="color:gray"class="subtitle is-2">No posts</p>
+        </section>
+      </div>
+    {% endif %}
+
+      </div>
+</div>
+</div>
+    </div>
+  </section>
+
+{% endblock %}

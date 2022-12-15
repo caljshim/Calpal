@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="columns is-mobile is-centered">
+  <div style="min-width:500px;max-width: 900px;" class="column">
+        <div class="card">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src="{{ post.picture.url }}" alt="Placeholder image">
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure style="height:48px;width:48px;overflow:hidden">
+                    {% if post.user.profile.picture %}
+                    <a href="{% url 'profile' post.user %}"><img style="height:100%;width:100%" src="{{ post.user.profile.picture.url }}" alt="Placeholder image"></a>
+                    {% else %}
+                    <a href="{% url 'profile' post.user %}"><img style="height:100%;width:100%" src="{% static 'img/defaultpfp.png' %}"></a>
+                    {% endif %}
+                  </figure>
+                </div>
+                <div class="media-content">
+                    {% if post.user.profile.first_name and post.user.profile.last_name %}
+                      <p class="title is-4">{{ post.user.profile.first_name}} {{post.user.profile.last_name}}</p>
+                      <p class="subtitle is-6">@{{ post.user.username }}</p>
+                    {% else %}
+                      <p class="title is-3">@{{ post.user.username }}</p>
+                    {% endif %}
+                </div>
+              </div>
+          
+              <div class="content">
+                {{ post.caption }}
+                <br>
+                <small style="color:gray">{{ post.posted|naturaltime }}</small>
+              </div>
+            </div>
+          </div>
+          <br>
+        
+      {% for comment in comments %}
+        <article class="media">
+          <figure class="media-left" style="height:48px;width:48px;overflow:hidden">
+            {% if comment.user.profile.picture %}
+              <a href="{% url 'profile' comment.user %}"><img style="height:100%;width:100%" src="{{ comment.user.profile.picture.url }}" alt="Placeholder image"></a>
+            {% else %}
+              <a href="{% url 'profile' comment.user %}"><img style="height:100%;width:100%" src="{% static 'img/defaultpfp.png' %}"></a>
+            {% endif %}
+          </figure>
+          <div class="media-content">
+            <div class="content">
+              <p>
+                <strong>@{{ comment.user.username }}</strong>
+                <br>
+                {{ comment.body }}
+                <br>
+                <small style="color:gray">{{ comment.date|naturaltime }}</small>
+              </p>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+        <div class="card-content">
+          <article class="media">
+            <figure class="media-left" style="height:48px;width:48px;overflow:hidden">
+              {% if request.user.profile.picture %}
+                <a href="{% url 'profile' request.user %}"><img style="height:100%;width:100%" src="{{ request.user.profile.picture.url }}" alt="Placeholder image"></a>
+              {% else %}
+                <a href="{% url 'profile' request.user %}"></a><img style="height:100%;width:100%" src="{% static 'img/defaultpfp.png' %}"></a>
+              {% endif %}
+            </figure>
+            <div class="media-content">
+              <form method="post" action="" role="form">
+                {% csrf_token %}
+                <div class="field">
+                  <p class="control">
+                    {{ form.body }}
+                  </p>
+                </div>
+                <div class="field">
+                  <p class="control">
+                    <button type="submit" name="action" class="button">Post comment</button>
+                  </p>
+                </div>
+            </form>
+            </div>
+          </article>
+        </div>
+        </div>
+        </div>
+        </div>
+        {% endblock %}
